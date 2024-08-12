@@ -1,0 +1,79 @@
+{% extends "security/base.html" %}
+{% from "security/_macros.html" import render_field_with_errors, render_field, render_form_errors, render_field_errors %}
+
+{% block content %}
+  <style>
+    /* Center the form with a max-width */
+    .register-form-container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f8f9fa; /* Light background for the form */
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Style the heading */
+    .register-form-container h1 {
+      text-align: center;
+      font-size: 2rem;
+      color: #343a40;
+      margin-bottom: 20px;
+    }
+
+    /* Style the form fields */
+    .register-form-container form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .register-form-container form input {
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ced4da;
+    }
+
+    /* Style the submit button */
+    .register-form-container form input[type="submit"] {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .register-form-container form input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    /* Style the error messages */
+    .register-form-container .error-message {
+      color: #dc3545;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+
+    /* Style for messages */
+    .register-form-container .flash-messages {
+      margin-bottom: 20px;
+    }
+  </style>
+
+  <div class="register-form-container">
+    {% include "security/_messages.html" %}
+    <h1>{{ _fsdomain('Register') }}</h1>
+    <form action="{{ url_for_security('register') }}" method="post" name="register_user_form">
+      {{ register_user_form.hidden_tag() }}
+      {{ render_form_errors(register_user_form) }}
+      {{ render_field_with_errors(register_user_form.email) }}
+      {% if config["SECURITY_USERNAME_ENABLE"] %}{{ render_field_with_errors(register_user_form.username) }}{% endif %}
+      {{ render_field_with_errors(register_user_form.password) }}
+      {% if register_user_form.password_confirm %}
+        {{ render_field_with_errors(register_user_form.password_confirm) }}
+      {% endif %}
+      {{ render_field_errors(register_user_form.csrf_token) }}
+      {{ render_field(register_user_form.submit) }}
+    </form>
+  </div>
+{% endblock content %}
