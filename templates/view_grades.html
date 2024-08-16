@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Your Grades</h1>
+
+{% if enrollments %}
+<ul>
+    {% for enrollment in enrollments %}
+    <li>
+        <strong>{{ enrollment.course.name }}</strong>: 
+        {% if enrollment.grade is not none %}
+            {{ enrollment.grade }}
+        {% else %}
+            Grade not submitted yet.
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>You are not enrolled in any courses.</p>
+{% endif %}
+
+<!-- Cancel Button -->
+<button class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
+
+{% endblock %}

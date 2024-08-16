@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Students Enrolled in {{ course.name }}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Grade</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for enrollment in enrollments %}
+                <tr>
+                    <td>{{ enrollment.student.username }}</td>
+                    <td>{{ enrollment.grade if enrollment.grade is not none else 'N/A' }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

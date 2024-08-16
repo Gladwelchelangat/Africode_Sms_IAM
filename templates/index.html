@@ -4,26 +4,39 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h1 class="mb-4">Welcome to the School  Management System</h1>
+    <h1 class="mb-4 text-center">Welcome to the School Management System</h1>
     
     <div class="row">
         <div class="col-md-6">
-            <div class="card mb-4">
+            <div class="card mb-4 shadow-sm border-info">
                 <div class="card-body">
-                    <h5 class="card-title">Quick Stats</h5>
+                    <h5 class="card-title text-info">Quick Stats</h5>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Total Courses: {{ courses_count }}</li>
-                        <li class="list-group-item">Total Students: {{ students_count }}</li>
-                        <li class="list-group-item">Total Teachers: {{ teachers_count }}</li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            Total Courses:
+                            <span class="badge bg-primary">{{ courses_count }}</span>
+                        </li>
+                        {% if not current_user.has_role('Student') %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            Total Students:
+                            <span class="badge bg-primary">{{ students_count }}</span>
+                        </li>
+                        {% endif %}
+                        {% if not current_user.has_role('Teacher') %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            Total Teachers:
+                            <span class="badge bg-primary">{{ teachers_count }}</span>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
         </div>
         
         <div class="col-md-6">
-            <div class="card mb-4">
+            <div class="card mb-4 shadow-sm border-success">
                 <div class="card-body">
-                    <h5 class="card-title">Your Information</h5>
+                    <h5 class="card-title text-success">Your Information</h5>
                     <p><strong>Email:</strong> {{ current_user.email }}</p>
                     <p><strong>Roles:</strong> 
                         {% for role in current_user.roles %}
@@ -36,27 +49,27 @@
                         <p><strong>Courses Teaching:</strong> {{ current_user.courses_taught|length }}</p>
                     {% endif %}
                 </div>
-
-                <div>
-                    <a href="{{ url_for_security('logout') }}" class="text-decoration-none text-center text-danger">{{ _fsdomain("Sign out") }}</a>
+                <div class="text-center mt-3">
+                    <a href="{{ url_for_security('logout') }}" class="btn btn-outline-danger">{{ _fsdomain("Sign out") }}</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row">
+    <div class="row mt-4">
         <div class="col-md-12">
-            <h2 class="mb-3">Quick Actions</h2>
-            <div class="d-flex flex-wrap gap-2">
+            <h2 class="mb-3 text-center">Quick Actions</h2>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
                 <a href="{{ url_for('courses') }}" class="btn btn-primary">View Courses</a>
                 {% if current_user.has_role('Admin') %}
                     <a href="{{ url_for('create_course') }}" class="btn btn-success">Create New Course</a>
                 {% endif %}
                 {% if current_user.has_role('Student') %}
-                    <a href="#" class="btn btn-info">View My Grades</a>
+                    <a href="{{ url_for('view_grades') }}" class="btn btn-primary">View My Grades</a>
                 {% endif %}
                 {% if current_user.has_role('Teacher') %}
-                    <a href="#" class="btn btn-warning">Manage My Courses</a>
+                <a href="{{ url_for('manage_courses') }}" class="btn btn-warning">Manage My Courses</a>
+                    <a href="{{ url_for('manage_students') }}" class="btn btn-warning">Manage Students</a>
                 {% endif %}
             </div>
         </div>

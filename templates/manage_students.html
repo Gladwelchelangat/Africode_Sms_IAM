@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Manage Students</h1>
+
+<ul>
+    {% for course in courses %}
+    <li>
+        <a href="{{ url_for('grade_course', course_id=course.id) }}">{{ course.name }}</a>
+    </li>
+    {% endfor %}
+</ul>
+<!-- Cancel Button -->
+<button class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
+
+{% endblock %}

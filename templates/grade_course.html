@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Grade Students for {{ course.name }}</h1>
+
+<ul>
+    {% for enrollment in enrollments %}
+    <li>
+        {{ enrollment.student.email }}
+        <form method="POST" action="{{ url_for('grade', enrollment_id=enrollment.id) }}" class="d-inline">
+            <input type="number" name="grade" step="0.1" min="0" max="100" value="{{ enrollment.grade or '' }}" required>
+            <button type="submit" class="btn btn-primary btn-sm">Submit Grade</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+<!-- Cancel Button -->
+<button class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
+
+{% endblock %}

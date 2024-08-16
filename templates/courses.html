@@ -9,6 +9,8 @@
         {% if current_user.has_role('Student') %}
             {% if course not in current_user.enrollments %}
             <a href="{{ url_for('enroll', course_id=course.id) }}" class="btn btn-primary btn-sm">Enroll</a>
+            {% else %}
+            <span class="text-muted">Enrolled</span>
             {% endif %}
         {% endif %}
     </li>
