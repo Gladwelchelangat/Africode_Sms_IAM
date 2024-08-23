@@ -1,8 +1,15 @@
+
+import os
 SECRET_KEY="hgbToJpSEz1DaUxpCSe43tn_jx2sImZP0hLFKT8_kB8"
 SECURITY_PASSWORD_SALT='46589359065962411892706150402684366383'
 #Database Configuration
-SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:xzOeEwTWNtrKXSpHyLCihtupLjtYicGz@postgres.railway.internal:5432/railway'
+#SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:xzOeEwTWNtrKXSpHyLCihtupLjtYicGz@postgres.railway.internal:5432/railway'
 # SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:Stuei@localhost:5432/sms'
+database_url = os.environ.get('DATABASE_URL', 'postgres://default:9McNmPuGCvh7@ep-damp-lake-a4qheolk-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require')
+if database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+SQLALCHEMY_DATABASE_URI = database_url
 
 
 
