@@ -34,6 +34,7 @@ pyOpenSSL==24.2.1
 pypng==0.20220715.0
 pytz==2024.1
 qrcode==7.4.2
+setuptools==73.0.1
 six==1.16.0
 SQLAlchemy==2.0.32
 SQLAlchemy-Utils==0.41.2

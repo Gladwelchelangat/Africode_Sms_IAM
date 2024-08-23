@@ -64,6 +64,9 @@
                 {% if current_user.has_role('Admin') %}
                     <a href="{{ url_for('create_course') }}" class="btn btn-success">Create New Course</a>
                 {% endif %}
+                {% if current_user.has_role('Admin') %}
+                <a href="{{ url_for('register_user') }}" class="btn btn-success">add user</a>
+            {% endif %}
                 {% if current_user.has_role('Student') %}
                     <a href="{{ url_for('view_grades') }}" class="btn btn-primary">View My Grades</a>
                 {% endif %}

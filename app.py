@@ -3,12 +3,15 @@ from flask_bootstrap import Bootstrap5
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required, current_user, roles_required, hash_password
 from flask_mailman import Mail
+from flask_security.forms import RegisterForm
+from flask_migrate import Migrate
 import config
 
 app = Flask(__name__)
 Bootstrap5(app)
 app.config.from_object(config)
 db = SQLAlchemy(app)
+migrate= Migrate(app,db)
 
 roles_users = db.Table('roles_users',
     db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
@@ -94,6 +97,26 @@ def create_course():
         return redirect(url_for('courses'))
     teachers = User.query.join(roles_users).join(User.roles).filter(Role.name == 'Teacher').all()  # Fixed: Corrected query for filtering teachers
     return render_template('create_course.html', teachers=teachers)
+
+@app.route('/register_user', methods=['GET', 'POST'])
+@roles_required('Admin')
+def register_user():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        role_name = request.form.get('role')
+
+        if User.query.filter_by(email=email).first():
+            flash('Email already registered!')
+        else:
+            role = user_datastore.find_role(role_name)
+            hashed_password = hash_password(password)
+            user_datastore.create_user(email=email, password=hashed_password, roles=[role])
+            db.session.commit()
+            flash(f'{role_name} registered successfully!')
+        return redirect(url_for('index'))
+
+    return render_template('register_user.html')
 
 @app.route('/enroll/<int:course_id>', methods=['GET', 'POST'])
 @roles_required('Student')  # Only students can access this route
@@ -215,6 +238,24 @@ def add_material(course_id):
         return redirect(url_for('manage_courses'))
     
     return render_template('add_material.html', course=course)
+@app.route('/delete_course/<int:course_id>', methods=['POST'])
+@roles_required('Teacher')  # Only instructors can delete courses
+def delete_course(course_id):
+    course = Course.query.get_or_404(course_id)
+
+    # You may want to add some checks here to ensure the user has permission to delete the course
+    # Example: Check if the current user is the creator of the course
+    
+    # Delete any enrollments related to the course first (to avoid foreign key constraints)
+    Enrollment.query.filter_by(course_id=course_id).delete()
+
+    # Delete the course itself
+    db.session.delete(course)
+    db.session.commit()
+
+    flash('Course has been deleted successfully!')
+    return redirect(url_for('manage_courses'))
+
 
 if __name__ == '__main__':
     with app.app_context():
@@ -241,4 +282,4 @@ if __name__ == '__main__':
             db.session.commit()
 
 
-    app.run( port=8000,debug=True)
+    app.run( port=5000,debug=True)

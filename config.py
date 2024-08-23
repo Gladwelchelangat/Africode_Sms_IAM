@@ -1,7 +1,9 @@
 SECRET_KEY="hgbToJpSEz1DaUxpCSe43tn_jx2sImZP0hLFKT8_kB8"
 SECURITY_PASSWORD_SALT='46589359065962411892706150402684366383'
 #Database Configuration
-SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:Stuei@localhost:5432/sms'
+SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:xzOeEwTWNtrKXSpHyLCihtupLjtYicGz@postgres.railway.internal:5432/railway'
+# SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:Stuei@localhost:5432/sms'
+
 
 
 SQLALCHEMY_TRACK_MODIFICATIONS=False
